@@ -9,7 +9,7 @@
 /*
     1024 Elements <= 2^10
 */
-#define E 1024  
+#define E 1024
 
 /*
     Degree of field 10
@@ -19,12 +19,19 @@
 /*
     Number of elements in field
 */
-#define N 1023 
+#define N 1023
 
 /*
     Generatore polinom value
     Z^10 + Z^3 + Z^0
 */
-#define GENERATOR_POLYNOME 1033  
+#define GENERATOR_POLYNOME 1033
+
+/*
+    Number of errors, defined by user
+*/
+#define TD 1
+
+
 
 #endif

@@ -156,6 +156,19 @@ Polynome operator/(Polynome &polynome, Element &devider){
     return result;
 }
 
+Polynome operator%(Polynome &first_polynome, Polynome &second_polynome){
+    /**
+    * Overloads operator % for two polynomes.
+    * Modul operator for two polynomes.
+    * @param first polynome used in mod
+    * @param second polynome used in mod
+    * @return polynome with result of mod operation of two polynomes
+    */
+    Polynome result;
+
+    return result;
+}
+
 ostream& operator<<(ostream& output_buffer,  Polynome &output_polynome){
     /**
     * Overloads operator << for polynome. Used for printing
@@ -184,9 +197,7 @@ bool operator==(Polynome &first_polynome, Polynome &second_polynome){
         if(first_polynome.polynome[index] == second_polynome.polynome[index])
             return false;
     }
-
     return true;
-
 }
 
 Polynome& Polynome::operator+=(Polynome& second_polynome)
@@ -210,6 +221,16 @@ Polynome& Polynome::operator*=(Polynome& second_polynome){
     * @return polynome with sum of two polynomes
     */
 	return *this = *this * second_polynome;
+}
+
+void Polynome::pad_polynome(uint16_t new_size){
+    /**
+    * Pads the array to a new size
+    * @param size of new polynome
+    */
+    for(uint16_t iterator = 0; iterator < new_size - self->polynome.size(); ++iterator){
+        self->polynome.push_back(Element(0));
+    }
 }
 
 vector<Element> Polynome::get_polynome(){
