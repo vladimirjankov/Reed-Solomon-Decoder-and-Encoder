@@ -69,12 +69,28 @@ Element operator*(const Element &first_element, const Element &second_element){
     * @param second element used in multiplication
     * @return element with multiplication of two elements
     */
+	if(first_element.element == 0 || second_element.element ==0)
+		return Element(0);
+
     int16_t logarithm_addition = Element::table_of_logarithms[first_element.element] +
                                   Element::table_of_logarithms[second_element.element];
 
     logarithm_addition = logarithm_addition % N;
 
     return Element::table_of_exponents[logarithm_addition];
+}
+
+Element operator^(const Element &first_element, const uint16_t degree){
+    /**
+    * Overloads operator ^ for element. Raises element to the
+    * power of value given in degree.
+    * @param degree
+    * @return element to the power of degree
+    */
+    int16_t exponent_of_element = Element::table_of_logarithms[first_element.element];
+    exponent_of_element = (exponent_of_element * degree) % N;
+    Element to_the_power(Element::table_of_exponents[exponent_of_element]);
+    return to_the_power;
 }
 
 Element operator/(const Element &first_element, const Element &second_element){
@@ -86,6 +102,10 @@ Element operator/(const Element &first_element, const Element &second_element){
     * @param second element used in devision
     * @return element with devided value two elements
     */
+	if(first_element.element == 0){
+		return Element(0);
+	}
+
     int16_t logarithm_subtraction = Element::table_of_logarithms[first_element.element] -
                                      Element::table_of_logarithms[second_element.element];
 
@@ -143,19 +163,6 @@ Element& Element::operator/=(const Element &second_element){
     return *this;
 }
 
-Element& Element::operator^(const int16_t degree){
-    /**
-    * Overloads operator ^ for element. Raises element to the
-    * power of value given in degree.
-    * @param degree
-    * @return element to the power of degree
-    */
-    int16_t exponent_of_element = Element::table_of_logarithms[this->element];
-    exponent_of_element = (exponent_of_element * degree) % N;
-    this->element = Element::table_of_exponents[exponent_of_element];
-    return *this;
-}
-
 bool operator==(const Element &first_element, const Element &second_element){
     /**
     * Overloads operator == for two elements. Checks if two elements
@@ -199,7 +206,7 @@ void Element::init_tabels(){
         // tabel of logarithm is inverse of table of exponents
         Element::table_of_logarithms[Element::table_of_exponents[index]] = index;
     }
-    table_of_logarithms[1U] = 0U;
+    Element::table_of_logarithms[1U] = 0U;
 }
 
 ostream& operator<<(ostream& output_buffer, const Element &output_element){
@@ -213,4 +220,5 @@ ostream& operator<<(ostream& output_buffer, const Element &output_element){
     output_buffer << output_element.element << " ";
     return output_buffer;
 }
+
 

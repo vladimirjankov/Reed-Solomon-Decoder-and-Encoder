@@ -6,7 +6,7 @@
 
 #include "coder.h"
 
-Coder::Coder();
+Coder::Coder()
 {
     /**
     * Constructor that generates an generator polynome
@@ -17,15 +17,15 @@ Coder::Coder();
     this->generator_polynome = Polynome(Element(1));
     this->length_of_information_sequence = N - 2 * TD;
 
-    for(uint16_t degree = 1; degree < 2 * TD; ++degree){
+    for(uint16_t degree = 1; degree <= 2 * TD; ++degree){
         vector<Element> z_plus_alpha;
         z_plus_alpha.push_back(Element(1));
         z_plus_alpha.push_back(Element(Element::table_of_exponents[degree]));
         Polynome z_plus_alpha_poly(z_plus_alpha);
-        this->generator_polynome *= z_plus_alpha;
+        this->generator_polynome *= z_plus_alpha_poly;
     }
 }
-Polynome Coder::encode_sequence(const Polynome &sequence){
+Polynome Coder::encode_sequence(Polynome &sequence){
     /**
     * Encodes the information sequence given in input parameter
     * sequence
@@ -34,8 +34,9 @@ Polynome Coder::encode_sequence(const Polynome &sequence){
     */
     Polynome coded_sequence(sequence);
     coded_sequence.pad_polynome(N);
+    Polynome moded;
+	moded = coded_sequence  % this->generator_polynome;
+    coded_sequence += moded;
 
-    coded_sequence += coded_sequence % this->generator_polynome;
     return coded_sequence;
-
 }

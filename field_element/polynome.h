@@ -21,12 +21,15 @@ class Polynome
         friend Polynome operator%(Polynome &first_polynome, Polynome &second_polynome);
         friend Polynome operator*(Polynome &polynome, Element &multiplier);
         friend Polynome operator/(Polynome &polynome, Element &devider);
+        friend ostream& operator<<(ostream& output_buffer, Polynome &polynome);
         friend bool operator==(Polynome &first_polynome, Polynome &second_polynome);
         Polynome& operator+=(Polynome& second_polynome);
         Polynome& operator*=(Polynome& second_polynome);
 
         void pad_polynome(uint16_t new_size);
         vector<Element> get_polynome();
+
+
 };
 
 #endif // POLYNOME_H

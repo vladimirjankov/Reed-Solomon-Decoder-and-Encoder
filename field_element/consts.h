@@ -32,6 +32,26 @@
 */
 #define TD 1
 
+/*
+	Number of elements in fourier transform 33
+ */
+#define N_FOURIER 33
+
+/*
+	Number of rows in CRT matrix
+*/
+#define N1 11
+
+/*
+ 	 Number of cols in CRT matrix
+*/
+#define N2 3
+
+/*
+ 	 Number of cols in CRT matrix
+*/
+#define N3 31
+
 
 
 #endif

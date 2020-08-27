@@ -132,6 +132,7 @@ Polynome operator*(Polynome &polynome, Element &multiplier){
         result_vector[index] = polynome.polynome[index] * multiplier;
     }
     Polynome result(result_vector);
+  //  std::cout << "Result:" << result << std::endl;
     return result;
 }
 
@@ -164,7 +165,22 @@ Polynome operator%(Polynome &first_polynome, Polynome &second_polynome){
     * @param second polynome used in mod
     * @return polynome with result of mod operation of two polynomes
     */
-    Polynome result;
+
+	Polynome result(first_polynome);
+	Polynome poly_two(second_polynome);
+
+	if(result.polynome.size() < poly_two.polynome.size())
+		return result;
+
+	while(result.polynome.size() >= poly_two.polynome.size() && !result.polynome.empty() ){
+		Element front_element_one = result.polynome.front();
+		Element front_element_two = poly_two.polynome.front();
+		Element coefficent = front_element_one / front_element_two;
+		Polynome temp;
+		temp = poly_two * coefficent;
+		result = result - temp;
+		result.polynome.erase(result.polynome.begin());
+	}
 
     return result;
 }
@@ -209,7 +225,8 @@ Polynome& Polynome::operator+=(Polynome& second_polynome)
     * @param second polynome used in addition
     * @return polynome with sum of two polynomes
     */
-	return *this = *this + second_polynome;
+	*this = *this + second_polynome;
+	return *this;
 }
 
 Polynome& Polynome::operator*=(Polynome& second_polynome){
@@ -228,9 +245,7 @@ void Polynome::pad_polynome(uint16_t new_size){
     * Pads the array to a new size
     * @param size of new polynome
     */
-    for(uint16_t iterator = 0; iterator < new_size - self->polynome.size(); ++iterator){
-        self->polynome.push_back(Element(0));
-    }
+	this->polynome.resize(new_size);
 }
 
 vector<Element> Polynome::get_polynome(){
@@ -238,7 +253,8 @@ vector<Element> Polynome::get_polynome(){
     * @return vector with elements in in polynome
     */
 
-    return this->polynome;
+    return polynome;
 }
+
 
 

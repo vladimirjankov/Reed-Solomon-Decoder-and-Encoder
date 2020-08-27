@@ -18,8 +18,7 @@ using namespace std;
 class Element
 {
     private:
-        int16_t element;
-
+		int16_t element;
     public:
         static bool is_first_init;
         static int16_t table_of_exponents[E];
@@ -33,8 +32,8 @@ class Element
         Element& operator-=(const Element &second_element);
         Element& operator*=(const Element &second_element);
         Element& operator/=(const Element &second_element);
-        Element& operator^(const int16_t degree);
 
+        friend Element operator^(const Element &first_element, const uint16_t degree);
         friend Element operator+(const Element &first_element, const Element &second_element);
         friend Element operator-(const Element &first_element, const Element &second_element);
         friend Element operator*(const Element &first_element, const Element &second_element);
