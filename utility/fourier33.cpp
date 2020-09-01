@@ -27,7 +27,6 @@ vector<vector<Element>> generate_crt_mapping(Polynome poly){
 	 * N1 * n1 + N2 * n2 = 1
 	 * @param input polynome to be transformed
 	 * */
-
 	int16_t n1, n2;
 	euclid_gcd(N1, N2, &n1, &n2);
 	vector<Element> poly_vector = poly.get_polynome();
@@ -58,10 +57,11 @@ vector<vector<Element>> good_thomas(vector<vector<Element>> b_i1_i2){
 	Element gama;
 	gama = omega ^ N1;
 
-	for(uint16_t iterator1 = 0; iterator1 < N1; ++iterator1){
-		for(uint16_t iterator2 = 0; iterator2 < N2; ++iterator2){
-			for(uint16_t iterator3 = 0; iterator3 < N2; ++iterator3){
-				c_i1_k2[iterator1][iterator2] += ( (gama^(iterator2 * iterator3)) + b_i1_i2[iterator1][iterator3]);
+//	cout << "FOURIER 33" << endl;
+	for(int16_t iterator1 = 0; iterator1 < N1; ++iterator1){
+		for(int16_t iterator2 = 0; iterator2 < N2; ++iterator2){
+			for(int16_t iterator3 = 0; iterator3 < N2; ++iterator3){
+				c_i1_k2[iterator1][iterator2] += ( (gama^(iterator2 * iterator3)) * b_i1_i2[iterator1][iterator3]);
 			}
 		}
 	}
@@ -69,10 +69,10 @@ vector<vector<Element>> good_thomas(vector<vector<Element>> b_i1_i2){
 	Element beta;
 	beta = omega ^ N2;
 	vector<vector<Element>> output_matrix(N2, vector<Element>(N1,Element(0)));
-	for(uint16_t iterator1 = 0; iterator1 < N2; ++iterator1){
-		for(uint16_t iterator2 = 0; iterator2 < N1; ++iterator2){
-			for(uint16_t iterator3 = 0; iterator3 < N1; ++iterator3){
-				output_matrix[iterator1][iterator2] += ((beta^(iterator2 * iterator3)) + c_i1_k2[iterator3][iterator1]);
+	for(int16_t iterator1 = 0; iterator1 < N2; ++iterator1){
+		for(int16_t iterator2 = 0; iterator2 < N1; ++iterator2){
+			for(int16_t iterator3 = 0; iterator3 < N1; ++iterator3){
+				output_matrix[iterator1][iterator2] += ((beta^(iterator2 * iterator3)) * c_i1_k2[iterator3][iterator1]);
 			}
 		}
 	}

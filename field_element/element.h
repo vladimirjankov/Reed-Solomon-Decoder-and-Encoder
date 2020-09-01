@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <stdint.h>
+#include <assert.h>
 
 #include "math.h"
 #include "consts.h"
@@ -28,12 +29,13 @@ class Element
         Element();
         Element(int16_t element);
 
+        Element inverse(Element input);
         Element& operator+=(const Element &second_element);
         Element& operator-=(const Element &second_element);
         Element& operator*=(const Element &second_element);
         Element& operator/=(const Element &second_element);
 
-        friend Element operator^(const Element &first_element, const uint16_t degree);
+        friend Element operator^(const Element &first_element, int16_t degree);
         friend Element operator+(const Element &first_element, const Element &second_element);
         friend Element operator-(const Element &first_element, const Element &second_element);
         friend Element operator*(const Element &first_element, const Element &second_element);
@@ -42,7 +44,7 @@ class Element
         friend ostream& operator<<(ostream& output_buffer, const Element &output_element);
         friend bool operator==(const Element &first_element, const Element &second_element);
         friend bool operator!=(const Element &first_element, const Element &second_element);
-
+        int16_t get_element();
 
 };
 

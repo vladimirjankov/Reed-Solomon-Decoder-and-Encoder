@@ -33,7 +33,6 @@ vector<vector<Element>> generate_crt_mapping_1023(Polynome poly){
 	reverted_poly_vec = poly_reversed.get_polynome();
 
 	vector<vector<Element>> b_i1_i2(N_FOURIER, vector<Element>(N3,Element(0)));
-	int16_t size = b_i1_i2.size();
 	// Generate CRT mapping aka b_i1_i2
 	for(uint16_t iterator1 = 0; iterator1 < N_FOURIER; ++iterator1){
 		for(uint16_t iterator2 = 0; iterator2 < N3; ++iterator2){
@@ -62,7 +61,7 @@ vector<vector<Element>> good_thomas_1023(vector<vector<Element>> b_i1_i2){
 	for(uint16_t iterator1 = 0; iterator1 < N_FOURIER; ++iterator1){
 		for(uint16_t iterator2 = 0; iterator2 < N3; ++iterator2){
 			for(uint16_t iterator3 = 0; iterator3 < N3; ++iterator3){
-				c_i1_k2[iterator1][iterator2] += ( (gama^(iterator2 * iterator3)) + b_i1_i2[iterator1][iterator3]);
+				c_i1_k2[iterator1][iterator2] += ( (gama^(iterator2 * iterator3)) * b_i1_i2[iterator1][iterator3]);
 
 			}
 		}
@@ -85,7 +84,7 @@ vector<vector<Element>> good_thomas_1023(vector<vector<Element>> b_i1_i2){
 
 		// Calculate fft33
 		fourier33(fft_input, fft33_output);
-
+		Polynome tmp(fft33_output);
 		// Add fourier vector to output matrix
 		for(uint16_t iterator2 = 0; iterator2 < N_FOURIER; ++iterator2){
 			output_matrix[iterator2][iterator1] = fft33_output[iterator2];

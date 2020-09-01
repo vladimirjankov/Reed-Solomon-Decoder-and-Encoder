@@ -80,14 +80,22 @@ Element operator*(const Element &first_element, const Element &second_element){
     return Element::table_of_exponents[logarithm_addition];
 }
 
-Element operator^(const Element &first_element, const uint16_t degree){
+Element operator^(const Element &first_element, int16_t degree){
     /**
     * Overloads operator ^ for element. Raises element to the
     * power of value given in degree.
     * @param degree
     * @return element to the power of degree
     */
+	if( first_element == Element(0))
+		return Element(0);
+
     int16_t exponent_of_element = Element::table_of_logarithms[first_element.element];
+    degree = degree % N;
+    if(degree == 0){
+    	Element one(1);
+    	return one;
+    }
     exponent_of_element = (exponent_of_element * degree) % N;
     Element to_the_power(Element::table_of_exponents[exponent_of_element]);
     return to_the_power;
@@ -221,4 +229,22 @@ ostream& operator<<(ostream& output_buffer, const Element &output_element){
     return output_buffer;
 }
 
+Element Element::inverse(Element input){
+	/**
+	 * Inverts input element
+	 * @param element to be inverted
+	 * @return inverted element
+	 */
+	assert(input.element != 0);
+	Element inverted(1);
+	inverted = inverted / input;
+	return inverted;
+}
+
+int16_t Element::get_element(){
+	/* Returns element as int16
+	 * return element
+	 * */
+	return this->element;
+}
 

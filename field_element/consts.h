@@ -30,7 +30,7 @@
 /*
     Number of errors, defined by user
 */
-#define TD 1
+#define TD 3
 
 /*
 	Number of elements in fourier transform 33

@@ -1,3 +1,9 @@
+//-----------------------------------------------------------
+// @author: Vladimir Jankov & Milan Bjelic
+// @email: vladimir.jankov@outlook.com & bjeliclaki@gmail.com
+// @date: 24.7.2020
+//--------------------
+
 #include "polynome.h"
 
 Polynome::Polynome(){
@@ -44,19 +50,22 @@ Polynome operator+(Polynome &first_polynome, Polynome &second_polynome){
     * @param second polynome used in addition
     * @return polynome with sum of two polynomes
     */
-    int16_t size_of_shorter = 0;
     Polynome *result_of_addition;
     if(first_polynome.polynome.size() > second_polynome.polynome.size()){
-        size_of_shorter = second_polynome.polynome.size();
         result_of_addition = new Polynome(first_polynome);
+        second_polynome.polynome.insert(second_polynome.polynome.begin(),
+        								first_polynome.polynome.size() - second_polynome.polynome.size(),
+										Element(0));
     }else{
-        size_of_shorter = first_polynome.polynome.size();
         result_of_addition = new Polynome(second_polynome);
+        first_polynome.polynome.insert(first_polynome.polynome.begin(),
+        								second_polynome.polynome.size() - first_polynome.polynome.size(),
+										Element(0));
     }
 
-    for(uint16_t index = 0; index < size_of_shorter; ++index){
+    for(uint16_t index = 0; index <  first_polynome.polynome.size(); ++index){
         result_of_addition->polynome[index] = first_polynome.polynome[index] +
-                                             second_polynome.polynome[index];
+                                              second_polynome.polynome[index];
     }
     return *result_of_addition;
 }
@@ -70,6 +79,7 @@ Polynome operator-(Polynome &first_polynome, Polynome &second_polynome){
     * @param second polynome used in subtraction
     * @return polynome with subtraction of two polynomes
     */
+	/*
     int16_t size_of_shorter = 0;
     Polynome *result_of_addition;
     if(first_polynome.polynome.size() > second_polynome.polynome.size()){
@@ -84,7 +94,11 @@ Polynome operator-(Polynome &first_polynome, Polynome &second_polynome){
         result_of_addition->polynome[index] = first_polynome.polynome[index] -
                                              second_polynome.polynome[index];
     }
-    return *result_of_addition;
+    */
+
+	Polynome result;
+	result = first_polynome + second_polynome;
+    return result;
 }
 
 Polynome operator*(Polynome &first_polynome, Polynome &second_polynome){
@@ -165,10 +179,10 @@ Polynome operator%(Polynome &first_polynome, Polynome &second_polynome){
     * @param second polynome used in mod
     * @return polynome with result of mod operation of two polynomes
     */
-
 	Polynome result(first_polynome);
 	Polynome poly_two(second_polynome);
-
+	result.erase_front_zeros();
+	poly_two.erase_front_zeros();
 	if(result.polynome.size() < poly_two.polynome.size())
 		return result;
 
@@ -178,10 +192,11 @@ Polynome operator%(Polynome &first_polynome, Polynome &second_polynome){
 		Element coefficent = front_element_one / front_element_two;
 		Polynome temp;
 		temp = poly_two * coefficent;
+		temp.pad_polynome(result.polynome.size());
 		result = result - temp;
-		result.polynome.erase(result.polynome.begin());
+		result.erase_front_zeros();
 	}
-
+	result.erase_front_zeros();
     return result;
 }
 
@@ -240,12 +255,26 @@ Polynome& Polynome::operator*=(Polynome& second_polynome){
 	return *this = *this * second_polynome;
 }
 
+Polynome Polynome::inverse(Polynome input){
+	/* Inverse an polynome
+	 * @param input polynome
+	 * @return inverted polynome
+	 * */
+	vector<Element> inv_vec = input.get_polynome();
+	for(auto it = inv_vec.begin(); it < inv_vec.end(); ++it){
+		*it = it->inverse(*it);
+	}
+	Polynome inverted(inv_vec);
+	return inverted;
+
+}
+
 void Polynome::pad_polynome(uint16_t new_size){
     /**
     * Pads the array to a new size
     * @param size of new polynome
     */
-	this->polynome.resize(new_size);
+	this->polynome.resize(new_size, Element(0));
 }
 
 vector<Element> Polynome::get_polynome(){
@@ -256,5 +285,35 @@ vector<Element> Polynome::get_polynome(){
     return polynome;
 }
 
+void Polynome::erase_front_zeros(){
+	/* Function to normalize polynome
+	 * if there are zeros on front it
+	 * will erase them
+	 * */
 
+	if(this->polynome.empty()){
+		return;
+	}
+	while (this->polynome.front() == Element(0))
+	{
+		this->polynome.erase(this->polynome.begin());
+		if (this->polynome.empty()){
+			return;
+		}
+	}
+}
+
+void Polynome::insert_zeros_front(int16_t number_of_zeros){
+	/* Inserts zeros to the front of polynome
+	 * @param number of zeros to insert
+	 * */
+	this->polynome.insert(this->polynome.begin(), number_of_zeros, Element(0));
+}
+
+void Polynome::erase_first_n(uint16_t number_of_elemnts){
+	/* Erase first N elements from polynome
+	 * @param number of elements to remove
+	 * */
+	this->polynome.erase(this->polynome.begin(), this->polynome.begin() + number_of_elemnts);
+}
 
