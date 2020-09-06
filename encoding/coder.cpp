@@ -15,7 +15,7 @@ Coder::Coder()
     * g(z) = (z + alpha)(z + alpha^2)(z + alpha^3)...(z + alpha^(2td))
     */
     this->generator_polynome = Polynome(Element(1));
-    this->length_of_information_sequence = N - 2 * TD;
+  //  this->length_of_information_sequence = N - 2 * TD;
 
     for(uint16_t degree = 1; degree <= 2 * TD; ++degree){
         vector<Element> z_plus_alpha;

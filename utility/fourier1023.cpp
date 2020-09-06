@@ -84,7 +84,7 @@ vector<vector<Element>> good_thomas_1023(vector<vector<Element>> b_i1_i2){
 
 		// Calculate fft33
 		fourier33(fft_input, fft33_output);
-		Polynome tmp(fft33_output);
+
 		// Add fourier vector to output matrix
 		for(uint16_t iterator2 = 0; iterator2 < N_FOURIER; ++iterator2){
 			output_matrix[iterator2][iterator1] = fft33_output[iterator2];

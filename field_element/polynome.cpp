@@ -50,24 +50,24 @@ Polynome operator+(Polynome &first_polynome, Polynome &second_polynome){
     * @param second polynome used in addition
     * @return polynome with sum of two polynomes
     */
-    Polynome *result_of_addition;
+    Polynome result_of_addition;
     if(first_polynome.polynome.size() > second_polynome.polynome.size()){
-        result_of_addition = new Polynome(first_polynome);
+        result_of_addition = Polynome(first_polynome);
         second_polynome.polynome.insert(second_polynome.polynome.begin(),
         								first_polynome.polynome.size() - second_polynome.polynome.size(),
 										Element(0));
     }else{
-        result_of_addition = new Polynome(second_polynome);
+        result_of_addition = Polynome(second_polynome);
         first_polynome.polynome.insert(first_polynome.polynome.begin(),
         								second_polynome.polynome.size() - first_polynome.polynome.size(),
 										Element(0));
     }
 
     for(uint16_t index = 0; index <  first_polynome.polynome.size(); ++index){
-        result_of_addition->polynome[index] = first_polynome.polynome[index] +
+        result_of_addition.polynome[index] = first_polynome.polynome[index] +
                                               second_polynome.polynome[index];
     }
-    return *result_of_addition;
+    return result_of_addition;
 }
 
 Polynome operator-(Polynome &first_polynome, Polynome &second_polynome){
@@ -181,14 +181,17 @@ Polynome operator%(Polynome &first_polynome, Polynome &second_polynome){
     */
 	Polynome result(first_polynome);
 	Polynome poly_two(second_polynome);
+
 	result.erase_front_zeros();
 	poly_two.erase_front_zeros();
 	if(result.polynome.size() < poly_two.polynome.size())
 		return result;
 
+
 	while(result.polynome.size() >= poly_two.polynome.size() && !result.polynome.empty() ){
 		Element front_element_one = result.polynome.front();
 		Element front_element_two = poly_two.polynome.front();
+
 		Element coefficent = front_element_one / front_element_two;
 		Polynome temp;
 		temp = poly_two * coefficent;

@@ -9,48 +9,48 @@
 /*
     1024 Elements <= 2^10
 */
-#define E 1024
+const int16_t E =  1024;
 
 /*
     Degree of field 10
 */
-#define DEGREE 10
+const int16_t DEGREE = 10;
 
 /*
     Number of elements in field
 */
-#define N 1023
+const int16_t N = 1023;
 
 /*
     Generatore polinom value
     Z^10 + Z^3 + Z^0
 */
-#define GENERATOR_POLYNOME 1033
+const int16_t GENERATOR_POLYNOME = 1033;
 
 /*
     Number of errors, defined by user
 */
-#define TD 3
+const int16_t TD = 4;
 
 /*
 	Number of elements in fourier transform 33
  */
-#define N_FOURIER 33
+const int16_t N_FOURIER = 33;
 
 /*
 	Number of rows in CRT matrix
 */
-#define N1 11
+const int16_t N1 = 11;
 
 /*
  	 Number of cols in CRT matrix
 */
-#define N2 3
+const int16_t N2 = 3;
 
 /*
  	 Number of cols in CRT matrix
 */
-#define N3 31
+const int16_t N3 = 31;
 
 
 

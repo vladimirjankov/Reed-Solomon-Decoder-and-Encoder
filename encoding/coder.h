@@ -19,9 +19,7 @@ class Coder
         Polynome encode_sequence(Polynome &sequence);
 
     private:
-        uint16_t length_of_coding_word;
-        uint16_t length_of_information_sequence;
-        uint16_t number_of_errors;
+     //   uint16_t length_of_information_sequence;
         Polynome generator_polynome;
 };
 

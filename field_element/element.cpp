@@ -14,7 +14,7 @@ Element::Element(){
     * Default constructor inits value with 0 and inits
     * table of logarithms and exponents if first init
     */
-    if(this->is_first_init == true){
+    if(is_first_init == true){
         init_tabels();
         this->is_first_init = false;
     }
@@ -73,7 +73,7 @@ Element operator*(const Element &first_element, const Element &second_element){
 		return Element(0);
 
     int16_t logarithm_addition = Element::table_of_logarithms[first_element.element] +
-                                  Element::table_of_logarithms[second_element.element];
+                                 Element::table_of_logarithms[second_element.element];
 
     logarithm_addition = logarithm_addition % N;
 
@@ -115,7 +115,7 @@ Element operator/(const Element &first_element, const Element &second_element){
 	}
 
     int16_t logarithm_subtraction = Element::table_of_logarithms[first_element.element] -
-                                     Element::table_of_logarithms[second_element.element];
+                                    Element::table_of_logarithms[second_element.element];
 
     if(logarithm_subtraction < 0)
         logarithm_subtraction = logarithm_subtraction + N;

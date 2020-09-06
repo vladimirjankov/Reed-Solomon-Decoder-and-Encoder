@@ -57,7 +57,6 @@ vector<vector<Element>> good_thomas(vector<vector<Element>> b_i1_i2){
 	Element gama;
 	gama = omega ^ N1;
 
-//	cout << "FOURIER 33" << endl;
 	for(int16_t iterator1 = 0; iterator1 < N1; ++iterator1){
 		for(int16_t iterator2 = 0; iterator2 < N2; ++iterator2){
 			for(int16_t iterator3 = 0; iterator3 < N2; ++iterator3){

@@ -16,7 +16,7 @@
 class Decoder {
 
 	private:
-		vector<Element> generate_forni();
+
 		vector<Element> calculate_syndrome(Polynome input_sequence);
 		vector<Element> berlekamp_massey(vector<Element> syndrome);
 		void zeros_finder(vector<Element> &sigma_l, vector<Element> &alpha_i, vector<Element> &beta_i);

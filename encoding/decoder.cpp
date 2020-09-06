@@ -76,11 +76,10 @@ vector<Element> Decoder::berlekamp_massey(vector<Element> syndrome){
 	Polynome sigma_l(Element(1));
 	for(uint16_t l = 1; l <= 2 * TD; ++l){
 		delta_l = syndrome[l];
-		if(L != 0U){
-			for(uint16_t iterator = 1; iterator <= L; ++iterator){
-				vector<Element> temp = sigma_l_minus_one.get_polynome();
-				delta_l += temp[temp.size() - iterator - 1] * syndrome[l - iterator];
-			}
+
+		for(uint16_t iterator = 1; iterator <= L; ++iterator){
+			vector<Element> temp = sigma_l_minus_one.get_polynome();
+			delta_l += temp[temp.size() - iterator - 1] * syndrome[l - iterator];
 		}
 
 		if(delta_l != Element(0)){
@@ -102,10 +101,18 @@ vector<Element> Decoder::berlekamp_massey(vector<Element> syndrome){
 		}
 	}
 	sigma_l.erase_front_zeros();
+	// sigma_l.get_polynome().size() - 1 is the degree of the polynome
+	if(sigma_l.get_polynome().size() - 1 > TD){
+		cout << "ERROR, THERE ARE MORE THAN " << TD <<" ERRORS THE SEQUENCE CAN NOT BE DECODED" << endl;
+		assert(false);
+	}
+	else{
+		cout << "NO ERROR" << endl;
+	}
 	return sigma_l.get_polynome();
 }
 
-void Decoder::zeros_finder(vector<Element> &sigma_l, vector<Element> &alpha, vector<Element> &inverted_alpha){
+void Decoder::zeros_finder(vector<Element> &sigma_l, vector<Element> &beta, vector<Element> &inverted_beta){
 	/* Pads the input sigma_l to 1023 and calculates fft1023
 	 * Looking for zeros in fourier transform
 	 *
@@ -120,22 +127,28 @@ void Decoder::zeros_finder(vector<Element> &sigma_l, vector<Element> &alpha, vec
 	int16_t index = 0;
 	for(auto it = spectrum.begin(); it < spectrum.end(); ++it){
 		if(*it == zero){
-			alpha.push_back(Element(Element::table_of_exponents[index]));
+			beta.push_back(Element(Element::table_of_exponents[index]));
 		}
 		++index;
 	}
-	Polynome inverted(alpha);
+	if(beta.size() != sigma_l.size() - 1){
+		cout << "ERROR, THERE ARE MORE THAN " << TD <<" ERRORS THE SEQUENCE CAN NOT BE DECODED" << endl;
+		assert(false);
+	}else{
+		cout << "NO ERROR" << endl;
+	}
+	Polynome inverted(beta);
 	inverted = inverted.inverse(inverted);
-	inverted_alpha = inverted.get_polynome();
+	inverted_beta = inverted.get_polynome();
 }
 
 vector<Element> Decoder::forney(vector<Element> sigmal_l, vector<Element> syndromes,
-		vector<Element> alhpa, vector<Element> inverted_alpha){
+		vector<Element> beta, vector<Element> inverted_beta){
 	/*  Calculates the values of errors via Forney algorihm
 	 * @param sigma_l polynome of error
 	 * @param syndromes
-	 * @param alhpa output of zero finder.
-	 * @param inverted_alpha log of these values are places of zeros
+	 * @param beta output of zero finder.
+	 * @param inverted_beta log of these values are places of zeros
 	 * */
 	Polynome inv_syndromes;
 	Polynome syndromes_poly(syndromes);
@@ -143,24 +156,26 @@ vector<Element> Decoder::forney(vector<Element> sigmal_l, vector<Element> syndro
 	Polynome omega;
 	Polynome sigma_poly(sigmal_l);
 	omega = inv_syndromes * sigma_poly;
-	omega.erase_first_n(sigmal_l.size() + 1);
-	omega.erase_front_zeros();
-	vector<Element> gama(alhpa.size(), Element(0));
-
-	for(uint16_t iterator1 = 0; iterator1 < alhpa.size(); ++iterator1){
+	vector<Element> temp_omega = omega.get_polynome();
+	vector<Element> omega_vec;
+	for(uint16_t iterator = temp_omega.size() - beta.size() - 1; iterator < temp_omega.size(); ++iterator){
+		omega_vec.push_back(temp_omega[iterator]);
+	}
+	vector<Element> gama(beta.size(), Element(0));
+	for(uint16_t iterator1 = 0; iterator1 < beta.size(); ++iterator1){
 		Element divider(1);
-		for(uint16_t iterator2 = 0; iterator2 < alhpa.size(); ++iterator2){
+		for(uint16_t iterator2 = 0; iterator2 < beta.size(); ++iterator2){
 			if(iterator1 != iterator2){
-				divider = divider * (Element(1) + alhpa[iterator2] * inverted_alpha[iterator1]);
+				divider = divider * (Element(1) + beta[iterator2] * inverted_beta[iterator1]);
 			}
 		}
-		vector<Element> tmp = omega.get_polynome();
-	    Element omega_forney = tmp.front();
 
-	    for(uint16_t iterator3 = 1; iterator3 < tmp.size(); ++iterator3)
+	    Element omega_forney = omega_vec.front();
+	    for(uint16_t iterator3 = 1; iterator3 < omega_vec.size(); ++iterator3)
 	    {
-	    	omega_forney *= inverted_alpha[iterator1];
-	    	omega_forney += tmp[iterator3];
+
+	    	omega_forney *= inverted_beta[iterator1];
+	    	omega_forney += omega_vec[iterator3];
 	    }
 	    gama[iterator1] = omega_forney / divider;
 	}
